@@ -291,34 +291,35 @@ async function tebak() {
 
 }
 
-async function youtube(){
-    const generateNumber = Math.floor(Math.random() * 10) + 1; 
+async function youtube() {
+    const generateNumber = Math.floor(Math.random() * 10) + 1;
+    const correctAnswer = factorial(generateNumber);
     await Swal.fire({
         title: "Nah..",
         text: "Kita udah sampai ke clue yang terakhir nih",
-        imageUrl:"assets/clap-hand-gesture.png",
-        imageWidth:200,
-        confirmButtonText:'Yuk klik disini',
-        showCancelButton:false,
+        imageUrl: "assets/clap-hand-gesture.png",
+        imageWidth: 200,
+        confirmButtonText: 'Yuk klik disini',
+        showCancelButton: false,
         imageAlt: "clap emoji"
     })
     await Swal.fire({
         title: "Tapi..",
         text: "Seperti biasa, gak seru rasanya kalau gak ada challenge sebelum dikasih clue nya",
-             imageUrl:"assets/pngegg.png",
-        imageWidth:100
+        imageUrl: "assets/pngegg.png",
+        imageWidth: 100
     })
     await Swal.fire({
-        title:"Jadi...",
+        title: "Jadi...",
         text: "challenge kali ini berhuhungan sama matematika",
-        icon:"info"
+        icon: "info"
     })
     await Swal.fire({
         title: "Jadi..",
-        text:"Persiapkan alat tulis nya yaa..",
-        icon:"warning"
+        text: "Persiapkan alat tulis nya yaa..",
+        icon: "warning"
     })
-        await Swal.fire({
+    await Swal.fire({
         timer: 5000,
         timerProgressBar: true,
         didOpen: () => {
@@ -341,7 +342,39 @@ async function youtube(){
         imageWidth: 100,
         showConfirmButton: false,
     })
-    factorialChallenge(generateNumber)
+    const { value: userInput } = await Swal.fire({
+        title: `Tuliskan hasil dari faktorial ${generateNumber}!`,
+        input: "number",
+        inputLabel: "Jawaban kamu",
+        inputValue: "1",
+        showCancelButton: true,
+        inputValidator: (value) => {
+            if (!value) {
+                return "You need to write something!";
+            }
+        }
+    })
+    if (Number(userInput) === correctAnswer) {
+        await Swal.fire({
+            title: "Selamat!",
+            text: "Benar jawabannya adalah "+correctAnswer+"!",
+            icon: "success",
+        });
+    } else {
+        await Swal.fire({
+            title: "Yahh",
+            text: `Maaf jawaban kamu salah. Jawaban yang benar adalah ${correctAnswer}. Belajar lagi tentang faktorial yaa!`,
+            icon: "error",
+            showConfirmButton: true
+        })
+        await Swal.fire({
+            title: "Coba lagi yah",
+            imageUrl: "assets/thumbsup.png",
+            imageAlt: "semangat emoji",
+            imageWidth: 100,
+        })
+        return;
+    }
     await Swal.fire({
         title: "Clue Terakhir nya",
         text: "kita bakal nonton sebuah video",
@@ -354,56 +387,19 @@ async function youtube(){
     })
     await Swal.fire({
         title: "Habis itu..",
-        text:"Tinggal kamu cocokin deh sama clue yang udah kamu dapetin sebelum nya, gampang kan!",
+        text: "Tinggal kamu cocokin deh sama clue yang udah kamu dapetin sebelum nya, gampang kan!",
         imageUrl: "assets/thumbsup.png",
-        imageWidth:100,
+        imageWidth: 100,
         imageAlt: "Thumbs icon"
     })
-     window.location = "https://youtu.be/T7s3IFMktLo?si=55ZejHoCVgFuQA3D&t=115"
+    window.location = "https://youtu.be/T7s3IFMktLo?si=55ZejHoCVgFuQA3D&t=115"
 }
 
-const factorialChallenge = async (number) => {
-        const correctAnswer = factorial(number);const { value: userInput } = await Swal.fire({
-            title: `Tuliskan hasil dari faktorial ${generateNumber}!`,
-            input: "number",
-            inputLabel: "Jawaban kamu",
-            inputValue: "1",
-            showCancelButton: true,
-            inputValidator: (value) => {
-                if (!value) {
-                    return "You need to write something!";
-                }
-            }
-        
-
-        if (userInput === correctAnswer) {
-            await Swal.fire({
-                title: "Selamat!",
-                text: "Jawaban kamu benar. Kamu siap untuk melanjutkan!",
-                icon: "success",
-            });
-        } else {
-           await Swal.fire({
-                title: "Yahh",
-                text`Jawabannya harus nya${correctAnswer} tapi kamu malah jawab ${userInput}, yuk pelajari lagi apa itu faktorial!`;,
-                icon:"error"
-                await Swal.fire({
-                    title:"Coba lagi yah",
-                     imageUrl: "assets/thumbsup.png",
-            imageAlt: "semangat emoji",
-            imageWidth: 100,
-
-                })
-                return;
-            })
-        }
-    };
-
-function factorial(n) { 
-    if (n === 0) { 
-        return 1; 
-    } 
-    else { 
-        return n * factorial( n - 1 ); 
-    } 
+function factorial(n) {
+    if (n === 0) {
+        return 1;
+    }
+    else {
+        return n * factorial(n - 1);
+    }
 } 
